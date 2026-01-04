@@ -592,6 +592,7 @@ class MapConnection(OpenWebRxClient):
             "flight_url",
             "modes_url",
             "receiver_name",
+            "osm_tile_server_addr",
         )
         self.configSub = filtered_config.wire(self.write_config)
 

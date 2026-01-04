@@ -281,6 +281,11 @@ class GeneralSettingsController(SettingsFormController):
                     ],
                 ),
                 TextInput(
+                    "osm_tile_server_addr",
+                    "osm tile server addr",
+                    infotext="http addr of external tile server - auto appends /{z}/{x}/{y}.png",
+                ),
+                TextInput(
                     "google_maps_api_key",
                     "Google Maps API key",
                     infotext="Google Maps requires an API key, check out "

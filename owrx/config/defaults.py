@@ -361,6 +361,7 @@ defaultConfig = PropertyLayer(
     allow_chat=True,
     tuning_precision=2,
     squelch_auto_margin=10,
+    osm_tile_server_addr="",
     google_maps_api_key="",
     openweathermap_api_key="",
     map_type="google",

@@ -100,7 +100,8 @@ MapManager.prototype.process = function(e) {
                     this.initializeMap(
                         this.config.receiver_gps,
                         this.config.google_maps_api_key,
-                        this.config.openweathermap_api_key
+                        this.config.openweathermap_api_key,
+                        this.config.osm_tile_server_addr
                     );
                 }
                 if ('receiver_name' in this.config) {
