@@ -1059,7 +1059,6 @@ function on_ws_recv(evt) {
                         if (profileBox.find("option:selected").css('display') === 'none') {
                             profileBox.val(profileBox.find("option:not(:disabled):first").val());
                         }
-                        break;
                     };
                     /////////////////////////////
                     // not sure if this is needed
