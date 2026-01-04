@@ -905,6 +905,13 @@ img.openwebrx-mirror-img
 	flex: 4;
 }
 
+#openwebrx-sdr-devices-listbox {
+    width: 100%;
+    font-size: 10pt;
+    height: 27px;
+}
+
+
 #openwebrx-sdr-profiles-listbox {
     width: 100%;
     font-size: 10pt;

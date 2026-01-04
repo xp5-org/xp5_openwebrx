@@ -1024,19 +1024,60 @@ function on_ws_recv(evt) {
                         // Feed bandplan display with data
                         bandplan.update(json['value']);
                         break;
-                    case "profiles":
-                        var listbox = $("#openwebrx-sdr-profiles-listbox");
-                        listbox.html(json['value'].map(function (profile) {
-                            return '<option value="' + profile['id'] + '">' + profile['name'] + "</option>";
-                        }).join(""));
-                        $('#openwebrx-sdr-profiles-listbox').val(currentprofile.toString());
-                        // this is a bit hacky since it only makes sense if the error is actually "no sdr devices"
-                        // the only other error condition for which the overlay is used right now is "too many users"
-                        // so there shouldn't be a problem here
-                        if (Object.keys(json['value']).length) {
-                            $('#openwebrx-error-overlay').hide();
+                case "profiles":
+                    var profiles = json['value'];
+                    var profileBox = $("#openwebrx-sdr-profiles-listbox");
+                    var deviceBox = $("#openwebrx-sdr-devices-listbox");
+
+                    // get device values
+                    var devices = [];
+                    profiles.forEach(function(p) {
+                        var dev = p.id.split('|')[0];
+                        if (devices.indexOf(dev) === -1) devices.push(dev);
+                    });
+                    devices.sort();
+                    deviceBox.html(devices.map(function(d) {
+                        return '<option value="' + d + '">' + d + '</option>';
+                    }).join(""));
+
+                    // get profile values
+                    profileBox.html(profiles.map(function(p) {
+                        return '<option value="' + p.id + '" data-device="' + p.id.split('|')[0] + '">' + p.name + '</option>';
+                    }).join(""));
+
+                    // show profiles with matching device
+                    var syncProfiles = function() {
+                        var selectedDev = deviceBox.val();
+                        profileBox.find("option").each(function() {
+                            var opt = $(this);
+                            if (opt.attr("data-device") === selectedDev) {
+                                opt.show().prop('disabled', false);
+                            } else {
+                                opt.hide().prop('disabled', true);
+                            }
+                        });
+                        if (profileBox.find("option:selected").css('display') === 'none') {
+                            profileBox.val(profileBox.find("option:not(:disabled):first").val());
                         }
                         break;
+                    };
+                    /////////////////////////////
+                    // not sure if this is needed
+                    if (typeof currentprofile === "string" && currentprofile.indexOf('|') !== -1) {
+                        deviceBox.val(currentprofile.split('|')[0]);
+                    }
+                    syncProfiles();
+                    deviceBox.off("change").on("change", function() {
+                        syncProfiles();
+                        if (typeof sdr_profile_changed === "function") sdr_profile_changed();
+                    });
+                    if (profiles.length) {
+                        $('#openwebrx-error-overlay').hide();
+                    }
+                    // not sure if this is needed
+                    /////////////////////////////
+                    break;
+
                     case "features":
                         Modes.setFeatures(json['value']);
                         $('#openwebrx-panel-metadata-wfm').metaPanel().each(function() {
